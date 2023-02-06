@@ -18,18 +18,36 @@ A brief description of your dataset including its provenance, dimensions, etc. a
 
 Make sure to load the data and use inline code for some of this information.
 
-```{r}
+```{r loading poll data}
 write_csv(poll, "/home/guest/project-01-company_reputation_poll/polls.csv")
 ```
 
-```{r}
+```{r loading reputation data}
 write_csv(reputation, "/home/guest/project-01-company_reputation_poll/reputation.csv")
 ```
 
+Our dataset comes we are all consumers from many of these industries company reputations blah blah
+
 # Questions
 
-The two questions you want to answer.
+1.  Which industry on average ranked the highest for each rating attribute in the year of 2022?
+
+2.  How does company RQ score change between the years of 2017 to 2022?
+
+    ```{reputation %>%}
+      group_by(industry)
+    ```
 
 # Analysis plan
 
 A plan for answering each of the questions including the variables involved, variables to be created (if any), external data to be merged in (if any).
+
+1.  Variables involved: `name`, `industry`, `rating`
+    1.  from the reputation dataset
+
+    2.  create new average score variable for each rating attribute for each industry
+2.  Variables involved: `company`, `rq`, `2022_rq`, `year`
+    1.  from polls dataset
+
+    2.  filtering for NA values, having to data wrangle for 2022 variable
+3.  
