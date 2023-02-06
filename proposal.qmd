@@ -42,12 +42,10 @@ Our dataset comes we are all consumers from many of these industries company rep
 
 A plan for answering each of the questions including the variables involved, variables to be created (if any), external data to be merged in (if any).
 
-1.  Variables involved: `name`, `industry`, `rating`
-    1.  from the reputation dataset
+Our analysis of question 1 will come from the `reputation` dataset. To see which industry on average ranked the highest for each attribute in 2022, we will use the variables `name`, `industry`, and `rating`. We will have to wrangle the data before visualization by creating an average rating variable for each attribute for each industry. Also, we may re-categorize some of the industries or place some companies in different industries to have better categories for comparison in the visualization. For our visualization, we are going to segment it by the seven attributes and show which industry has the highest average score in each.
 
-    2.  create new average score variable for each rating attribute for each industry
-2.  Variables involved: `company`, `rq`, `2022_rq`, `year`
+1.  Variables involved: `company`, `rq`, `2022_rq`, `year`
     1.  from polls dataset
 
     2.  filtering for NA values, having to data wrangle for 2022 variable
-3.  
+2.  
