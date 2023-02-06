@@ -26,7 +26,7 @@ write_csv(poll, "/home/guest/project-01-company_reputation_poll/polls.csv")
 write_csv(reputation, "/home/guest/project-01-company_reputation_poll/reputation.csv")
 ```
 
-Our dataset comes we are all consumers from many of these industries company reputations blah blah
+We've interacted with many of these companies before, yet our familiarity with these entities is limited solely to their name recognition. In an effort to expand our knowledge and gain a more comprehensive understanding of their respective positions, we aim to delve deeply into the available data from the 2022 Axios-Harris Poll and draw deeper insights. We\'re interested in investigating companies across different industries that are highly reputable, but may have experienced either a decline or rise in the public\'s eye. 
 
 # Questions
 
