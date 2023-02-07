@@ -1,11 +1,11 @@
 ---
-title: "Project title"
+title: "Investigating Brand Reputation of America's Top 100 Companies"
 subtitle: "Proposal"
 format: html
 editor: visual
 ---
 
-```{r}
+```{r, include=FALSE}
 #| label: load-pkgs
 #| message: false
 
@@ -18,25 +18,31 @@ A brief description of your dataset including its provenance, dimensions, etc. a
 
 Make sure to load the data and use inline code for some of this information.
 
+```{r}
+# poll <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/poll.csv') 
+# reputation <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/reputation.csv')
+```
+
+```{r-load-data, include=FALSE}
+poll <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/poll.csv') 
+reputation <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/reputation.csv')
+```
+
 ```{r loading poll data}
-write_csv(poll, "/home/guest/project-01-company_reputation_poll/polls.csv")
+# write_csv(poll, "/home/guest/project-01-team_six/polls.csv")
 ```
 
 ```{r loading reputation data}
-write_csv(reputation, "/home/guest/project-01-company_reputation_poll/reputation.csv")
+# write_csv(reputation, "/home/guest/project-01-team_six/reputation.csv")
 ```
 
-We've interacted with many of these companies before, yet our familiarity with these entities is limited solely to their name recognition. In an effort to expand our knowledge and gain a more comprehensive understanding of their respective positions, we aim to delve deeply into the available data from the 2022 Axios-Harris Poll and draw deeper insights. We\'re interested in investigating companies across different industries that are highly reputable, but may have experienced either a decline or rise in the public\'s eye. 
+We've interacted with many of these companies before, yet our familiarity with these entities is limited solely to their name recognition. In an effort to expand our knowledge and gain a more comprehensive understanding of their respective positions, we aim to delve deeply into the available data from the 2022 Axios-Harris Poll and draw deeper insights. We're interested in investigating companies across different industries that are highly reputable, but may have experienced either a decline or rise in the public's eye. 
 
 # Questions
 
 1.  Which industry on average ranked the highest for each rating attribute in the year of 2022?
 
 2.  How does company RQ score change between the years of 2017 to 2022?
-
-    ```{reputation %>%}
-      group_by(industry)
-    ```
 
 # Analysis plan
 
