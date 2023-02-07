@@ -23,10 +23,7 @@ Make sure to load the data and use inline code for some of this information.
 # reputation <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/reputation.csv')
 ```
 
-```{r-load-data, include=FALSE}
-poll <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/poll.csv') 
-reputation <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/reputation.csv')
-```
+`{r-load-data, include=FALSE} poll <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/poll.csv')  reputation <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/reputation.csv')`
 
 ```{r loading poll data}
 # write_csv(poll, "/home/guest/project-01-team_six/polls.csv")
@@ -36,7 +33,9 @@ reputation <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience
 # write_csv(reputation, "/home/guest/project-01-team_six/reputation.csv")
 ```
 
-We've interacted with many of these companies before, yet our familiarity with these entities is limited solely to their name recognition. In an effort to expand our knowledge and gain a more comprehensive understanding of their respective positions, we aim to delve deeply into the available data from the 2022 Axios-Harris Poll and draw deeper insights. We're interested in investigating companies across different industries that are highly reputable, but may have experienced either a decline or rise in the public's eye. 
+The dataset that we are using comes from the TidyTuesday project and comes from the Axis-Harris Poll which investigated the reputation of the most visible brands in America. The poll actually resulted in two datsets: `polls` and `reputation`. The `polls` dataset has 8 variables and 500 rows or observations. This dataset has each company's overall ranking and RQ score (a computed compilation of company attribute rankings ) as well as information from previous years. Next, the `reputation` dataset has 10 variables and 700 rows or observations. This dataset is only from the year 2022, and shows the individual breakdown for how companies were rated based on certain rating attributes.
+
+We've interacted with many of these companies before, yet our familiarity with these entities is limited solely to their name recognition. In an effort to expand our knowledge and gain a more comprehensive understanding of their respective positions, we aim to delve deeply into the available data from the 2022 Axios-Harris Poll and draw deeper insights. We're interested in investigating companies across different industries that are highly reputable, but may have experienced either a decline or rise in the public's eye.
 
 # Questions
 
