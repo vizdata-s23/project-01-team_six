@@ -22,9 +22,9 @@ A brief description of your dataset including its provenance, dimensions, etc. a
 
 Make sure to load the data and use inline code for some of this information.
 
-```{r}
-# poll <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/poll.csv') 
-# reputation <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/reputation.csv')
+```{r warning = FALSE}
+poll <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/poll.csv') 
+reputation <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/reputation.csv')
 ```
 
 ```{r loading poll data}
@@ -51,4 +51,4 @@ A plan for answering each of the questions including the variables involved, var
 
 Our analysis of question 1 will come from the `reputation` dataset. To see which industry on average ranked the highest for each attribute in 2022, we will use the variables `name`, `industry`, and `rating`. We will have to wrangle the data before visualization by creating an average rating variable for each attribute for each industry. Also, we may re-categorize some of the industries or place some companies in different industries to have better categories for comparison in the visualization. For example, many grocery chains, like Trader Joe's and HEB Grocery, are categorized as retail and not under the category for grocery. For our visualization, we are going to segment it by the seven attributes and show which industry has the highest average score in each. Currently, we are thinking of using a lollipop plot to accomplish this.
 
-For question 2, our analysis will come from the `polls` dataset. Variables involved include `company`, `rq`, `2022_rq`, and `year`. To examine how the company RQ score changes between 2017 and 2022, we will first remove all companies for which there is an NA value for RQ score for any of these years. Alternatively, we could impute values for missing data using mean RQ scores for company, but this would result in unreliable data. We will then wrangle the data so that `2022_rq` is in the same column as `rq` since the 2022 values of RQ exist in a separate column in the data set than the RQ values for years 2017 to 2021. There are 19 companies in the dataset, so we will explore options such as fill, shape, and text labels to distinguish data for different companies in our visualization.
+For question 2, our analysis will come from the `polls` dataset. Variables involved include `company`, `rq`, `2022_rq`, and `year`. To examine how the company RQ score changes between 2017 and 2022, we will first remove all companies for which there is an NA value for RQ score for any of these years. Alternatively, we could impute values for missing data using mean RQ scores for company, but this would result in unreliable data. We will then wrangle the data so that `2022_rq` is in the same column as `rq` since the 2022 values of RQ exist in a separate column in the data set than the RQ values for years 2017 to 2021. There are 19 companies in the dataset, and it'd be difficult to visualize all of them in one graph. Instead, we will filter for the top 5 companies who had the greatest RQ score change from 2017-2022, and use a linegraph to visualize their change over time.
