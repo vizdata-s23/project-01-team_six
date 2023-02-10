@@ -12,6 +12,10 @@ editor: visual
 library(tidyverse)
 ```
 
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, echo = FALSE, message = FALSE)
+```
+
 # Dataset
 
 A brief description of your dataset including its provenance, dimensions, etc. as well as the reason why you chose this dataset.
@@ -22,8 +26,6 @@ Make sure to load the data and use inline code for some of this information.
 # poll <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/poll.csv') 
 # reputation <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/reputation.csv')
 ```
-
-`{r-load-data, include=FALSE} poll <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/poll.csv')  reputation <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/reputation.csv')`
 
 ```{r loading poll data}
 # write_csv(poll, "/home/guest/project-01-team_six/polls.csv")
