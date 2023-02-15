@@ -2,9 +2,14 @@ project:
   type: website
 
 website:
+  title: Team name
   navbar:
+    right:
+      - icon: github
+        href: https://github.com/vizdata-s23/project-01-team_six
     left:
-      - href: index.qmd
+      - text: Project
+        href: index.qmd
       - text: "Proposal"
         href: proposal.qmd
       - text: "Presentation"
@@ -15,6 +20,7 @@ website:
 format:
   html:
     theme: default
+    toc: true
 
 execute:
   freeze: auto
