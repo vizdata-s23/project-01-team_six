@@ -18,10 +18,6 @@ knitr::opts_chunk$set(warning = FALSE, echo = FALSE, message = FALSE)
 
 # Dataset
 
-A brief description of your dataset including its provenance, dimensions, etc. as well as the reason why you chose this dataset.
-
-Make sure to load the data and use inline code for some of this information.
-
 ```{r warning = FALSE}
 poll <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/poll.csv') 
 reputation <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/reputation.csv')
@@ -48,8 +44,6 @@ We've interacted with many of these companies before, yet our familiarity with t
 2.  How does company RQ score change between the years of 2017 to 2022 and are the trends consistent with their overall industry?
 
 # Analysis plan
-
-A plan for answering each of the questions including the variables involved, variables to be created (if any), external data to be merged in (if any).
 
 Our analysis of question 1 will come from the `reputation` dataset. To see what individuals valued in a company in 2022, we will examine the different rating attributes (i.e. growth, vision, p&s etc) and see which ones tended to score the highest. However, because companies in different industries probably experience differences in rating attributes, we want to first see which industries ranked the highest for each rating attribute by creating an average rating variable for each attribute for each industry. It is important to note that we may re-categorize some of the industries or place some companies in different industries to have better categories for comparison in the visualization. This is because many grocery chains, like Trader Joe's and HEB Grocery, are categorized as retail and not under the category for grocery. For our first visualization, we will use the `name`, `industry`, and `score` variables to show the distribution of company scores for the industry with the highest average score for each of the 7 rating attributes. To do so, we will use a boxplot for each industry and examine the differences in distributions across these top score industries for each attribute. We also thought that it is possible that rating attributes could be correlated with one another. Specifically, we will focus on the top two rating attributes based on `score` and will plot those two rating attributes together on the same graph using `geom_point()` to see if there is any relationship.
 
