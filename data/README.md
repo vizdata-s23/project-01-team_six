@@ -1,8 +1,8 @@
 # data dictionary
 
-## polls.csv
+## polls.csv 
 
-|variable         |class | description|
+|variable         |class | description| 
 |:----------------|:-----------|:-----------|
 |company        |character | Company Name |
 |industry        |character | 		Industry group |
