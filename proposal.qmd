@@ -12,41 +12,45 @@ editor: visual
 library(tidyverse)
 ```
 
-# Dataset
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, echo = FALSE, message = FALSE)
+```
+
+## Dataset
 
 A brief description of your dataset including its provenance, dimensions, etc. as well as the reason why you chose this dataset.
 
 Make sure to load the data and use inline code for some of this information.
 
-```{r}
-# poll <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/poll.csv') 
-# reputation <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/reputation.csv')
+```{r warning = FALSE}
+poll <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/poll.csv') 
+reputation <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/reputation.csv')
 ```
 
-`{r-load-data, include=FALSE} poll <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/poll.csv')  reputation <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/reputation.csv')`
-
 ```{r loading poll data}
-# write_csv(poll, "/home/guest/project-01-team_six/polls.csv")
+## write_csv(poll, "/home/guest/project-01-team_six/polls.csv")
 ```
 
 ```{r loading reputation data}
-# write_csv(reputation, "/home/guest/project-01-team_six/reputation.csv")
+## write_csv(reputation, "/home/guest/project-01-team_six/reputation.csv")
 ```
 
-The dataset that we are using comes from the TidyTuesday project and comes from the Axis-Harris Poll which investigated the reputation of the most visible brands in America. The poll actually resulted in two datsets: `polls` and `reputation`. The `polls` dataset has 8 variables and 500 rows or observations. This dataset has each company's overall ranking and RQ score (a computed compilation of company attribute rankings ) as well as information from previous years. Next, the `reputation` dataset has 10 variables and 700 rows or observations. This dataset is only from the year 2022, and shows the individual breakdown for how companies were rated based on certain rating attributes.
+The dataset that we are using comes from the TidyTuesday project and comes from the Axis-Harris Poll which investigated the reputation of the most visible brands in America. The Harris Poll conducted a survey in February 2022 among a representative sample of the American population to identify the companies that were most prominent in the public's mind. The top 100 companies with the highest number of nominations were included in the "Most Visible" list.
+
+The poll actually resulted in two datsets: `polls` and `reputation`. The `polls` dataset has 8 variables and 500 rows or observations. This dataset has each company's overall ranking and RQ score in 2022 as well as information about each company's rating from 2017 to 2021. RQ scores are a metric that is a combination of each company's rating for each specific attribute. The attributes are: trust, ethics, growth, p&s, citizenship, vision, and culture. It is specifically calculated using the formula: is calculated by: \[ (Sum of ratings of each of the 9 attributes)/(the total number of attributes answered x 7) \] x 100. Next, the `reputation` dataset has 10 variables and 700 rows or observations. This dataset is only from the year 2022, and shows the individual breakdown for how companies were rated based on certain rating attributes.
 
 We've interacted with many of these companies before, yet our familiarity with these entities is limited solely to their name recognition. In an effort to expand our knowledge and gain a more comprehensive understanding of their respective positions, we aim to delve deeply into the available data from the 2022 Axios-Harris Poll and draw deeper insights. We're interested in investigating companies across different industries that are highly reputable, but may have experienced either a decline or rise in the public's eye.
 
-# Questions
+## Questions
 
 1.  Which industry on average ranked the highest for each rating attribute in the year of 2022?
 
 2.  How does company RQ score change between the years of 2017 to 2022?
 
-# Analysis plan
+## Analysis plan
 
 A plan for answering each of the questions including the variables involved, variables to be created (if any), external data to be merged in (if any).
 
-Our analysis of question 1 will come from the `reputation` dataset. To see which industry on average ranked the highest for each attribute in 2022, we will use the variables `name`, `industry`, and `rating`. We will have to wrangle the data before visualization by creating an average rating variable for each attribute for each industry. Also, we may re-categorize some of the industries or place some companies in different industries to have better categories for comparison in the visualization. For our visualization, we are going to segment it by the seven attributes and show which industry has the highest average score in each.
+Our analysis of question 1 will come from the `reputation` dataset. To see which industry on average ranked the highest for each attribute in 2022, we will use the variables `name`, `industry`, and `rating`. We will have to wrangle the data before visualization by creating an average rating variable for each attribute for each industry. Also, we may re-categorize some of the industries or place some companies in different industries to have better categories for comparison in the visualization. For example, many grocery chains, like Trader Joe's and HEB Grocery, are categorized as retail and not under the category for grocery. For our visualization, we are going to segment it by the seven attributes and show which industry has the highest average score in each. Currently, we are thinking of using a lollipop plot to accomplish this.
 
-For question 2, our analysis will come from the `polls` dataset. Variables involved include `company`, `rq`, `2022_rq`, and `year`. To examine how the company RQ score changes between 2017 and 2022, we will first remove all companies for which there is an NA value for RQ score for any of these years. Alternatively, we could impute values for missing data using mean RQ scores for company, but this would result in unreliable data. We will then wrangle the data so that `2022_rq` is in the same column as `rq` since the 2022 values of RQ exist in a separate column in the data set than the RQ values for years 2017 to 2021. There are 19 companies in the dataset, so we will explore options such as fill, shape, and text labels to distinguish data for different companies in our visualization.
+For question 2, our analysis will come from the `polls` dataset. Variables involved include `company`, `rq`, `2022_rq`, and `year`. To examine how the company RQ score changes between 2017 and 2022, we will first remove all companies for which there is an NA value for RQ score for any of these years. Alternatively, we could impute values for missing data using mean RQ scores for company, but this would result in unreliable data. We will then wrangle the data so that `2022_rq` is in the same column as `rq` since the 2022 values of RQ exist in a separate column in the data set than the RQ values for years 2017 to 2021. There are 19 companies in the dataset, and it'd be difficult to visualize all of them in one graph. Instead, we will filter for the top 3 companies who had the greatest increase in RQ score and top 3 companies with the greatest decrease in RQ score from 2017-2022. Next, we intend on created a progressive line chart to visualize their change over time, where each line represents a company. We will utilize the `gganimate` package with the `transition_reveal()` function set to yearly to demonstrate this, and include the `geom_point()` function grouping each company so for each year, an RQ score is illustrated clearly for each company.
