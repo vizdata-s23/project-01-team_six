@@ -5,19 +5,11 @@ format: html
 editor: visual
 ---
 
-```{r, setup, include=FALSE}
-knitr::opts_chunk$set(warning = FALSE, echo = FALSE, message = FALSE)
-```
-
 # Dataset
-
-```{r warning = FALSE}
-poll <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/poll.csv') 
-```
 
 1.  How does company RQ score change between the years of 2017 to 2022 and are the trends consistent with their overall industry?
 
-`polls` dataset. Variables involved include `company`, `rq`, `2022_rq`, and `year`.
+`poll` dataset. Variables involved include `company`, `rq`, `2022_rq`, and `year`.
 
 -   Remove all companies for which there is an NA value for RQ score for any of these years.
 
@@ -26,6 +18,10 @@ poll <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidyt
 -   Filter for the top 3 companies who had the greatest increase in RQ score and top 3 companies with the greatest decrease in RQ score from 2017-2022.
 
 -   Next, we intend on created a progressive line chart to visualize their change over time, where each line represents a company. We will utilize the `gganimate` package with the `transition_reveal()` function set to yearly to demonstrate this, and include the `geom_point()` function grouping each company so for each year
+
+```{r}
+knitr::opts_chunk$set(warning = FALSE, echo = FALSE, message = FALSE)
+```
 
 ```{r load packages}
 library(dplyr)
@@ -36,6 +32,10 @@ library(gganimate)
 ```
 
 ```{r}
+poll <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/poll.csv') 
+```
+
+```{r}
 poll <- poll %>%
   group_by(company) %>%
   filter(!any(is.na(rq) & year %in% 2017:2021)) %>%
@@ -43,8 +43,21 @@ poll <- poll %>%
 ```
 
 ```{r}
-poll$rq_score <- ifelse(is.na(poll$rq_score), poll$'2022_rq', poll$rq_score + poll$'2022_rq')
-polls <- select(polls, -'2022_rq')
+poll <- select(poll, -'2022_rank',  -'change', -'rank')
 ```
 
-\
+```{r}
+polls_2022 <- poll %>%
+  select(company, '2022_rq') %>%
+  distinct() %>%
+  rename(rq = `2022_rq`) %>%
+  mutate(year = 2022)
+```
+
+```{r}
+poll <- bind_rows(poll, polls_2022)
+```
+
+```{r}
+poll <- select(poll, -'industry',  -'2022_rq')
+```
