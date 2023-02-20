@@ -20,3 +20,43 @@ reputation <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience
 ```{r}
 view(poll)
 ```
+
+Steps:
+- Create summary of score variables to see which two attributes are highest on average
+- Plot those two attributes
+
+```{r}
+average_attributes <- reputation %>%
+  group_by(name) %>%
+  summarise(average_score = mean(score), .groups ="drop") %>%
+  arrange(desc(average_score))
+
+average_attributes
+
+```
+
+The two highest attributes are vision and growth, so we will compare those in the next visualization. 
+
+```{r}
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
