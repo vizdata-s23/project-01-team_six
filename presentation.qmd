@@ -1,7 +1,7 @@
 ---
-title: "Project title"
+title: "Investigating America's Most Reputable Companies"
 subtitle: "STA/ISS 313 - Spring 2023 - Project 1"
-author: "Team Name"
+author: "Team Six: Chris Yang, Florence Wang, George McCabe, Shelby Tisdale"
 title-slide-attributes:
   data-background-image: images/watercolour_sys02_img34_teacup-ocean.jpg
   data-background-size: stretch
