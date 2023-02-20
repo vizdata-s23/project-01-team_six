@@ -22,91 +22,32 @@ poll <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidyt
 reputation <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/reputation.csv')
 ```
 
-Steps:
-- Create summary of score variables to see which two attributes are highest on average
-- Plot those two attributes
-
-```{r}
-average_attributes <- reputation %>%
-  group_by(name) %>%
-  summarise(average_score = mean(score), .groups ="drop") %>%
-  arrange(desc(average_score))
-
-average_attributes
-
-```
-
-The two highest attributes are vision and growth, so we will compare those in the next visualization. 
-
-```{r}
-
-reputation_v_g <- reputation %>%
-  filter(name == "VISION" | name == "GROWTH") %>%
-  select(company, name, score, industry)
-
-reputation_v_g <- reputation_v_g %>%
-  pivot_wider(
-    names_from = name,
-    values_from = score
-  )
-
-```
-
-```{r}
-ggplot(data = reputation_v_g,
-       aes(x = VISION, y = GROWTH)) +
-  geom_point(aes(color = industry)) +
-  geom_smooth(method = lm) + 
-#  geom_bin2d(binwidth = c(1, 1)) +
-  stat_cor() +  
-#  geom_rug() +
-#  geom_text_repel(aes(label = company)) + 
-# scale_color_viridis(discrete = TRUE) +
-  theme_minimal() + 
-  labs(
-    x = "Vision Attribute (out of 100)",
-    y = "Growth Attribute (out of 100)",
-    title = "Comparison of Companies' Vision and Growth Ratings",
-    subtitle = "Vision and growth are strongly correlated"
-  )
-```
-
-```{r}
-ggplot(data = reputation_v_g,
-       aes(x = VISION, y = GROWTH)) +
-#  geom_point(aes(color = industry)) +
-  geom_smooth(method = lm) + 
-  geom_bin2d() +
-#  stat_cor() +  
-#  geom_rug() +
-#  geom_text_repel(aes(label = company)) + 
-# scale_color_viridis(discrete = TRUE) +
-  theme_minimal() + 
-  labs(
-    x = "Vision Attribute (out of 100)",
-    y = "Growth Attribute (out of 100)",
-    title = "Comparison of Companies' Vision and Growth Ratings",
-    subtitle = "Vision and growth are strongly correlated"
-  )
-```
 
 Correlation matrix:
 
 ```{r}
-reputation_longer <- reputation %>%
-  select(company, name, score, industry) %>%
+reputation_longer <- reputation |>
+  select(company, name, score, industry) |>
   pivot_wider(
     names_from = name,
     values_from = score
   )
 
+reputation_longer <- reputation_longer |>
+  rename("Trust" = "TRUST",
+         "Ethics" = "ETHICS",
+         "Growth" = "GROWTH",
+         "Citizenship" = "CITIZENSHIP",
+         "Vision" = "VISION",
+         "Culture" = "CULTURE")
+
 ```
 
 ```{r}
-attributes_corr <- reputation_longer %>%
-  as.data.frame() %>%                
-  select(TRUST, ETHICS, GROWTH, `P&S`, CITIZENSHIP, VISION, CULTURE) %>%                   
-  as.matrix() %>%                   
+attributes_corr <- reputation_longer |>
+  as.data.frame() |>               
+  select(Trust, Ethics, Growth, `P&S`, Citizenship, Vision, Culture) |>                   
+  as.matrix() |>                   
   cor() 
 attributes_corr
 
@@ -115,12 +56,29 @@ attributes_p_values
 ```
 
 ```{r}
-ggcorrplot(attributes_corr, 
-           hc.order = TRUE, 
-           outline.col = "white",
+ggcorrplot(attributes_corr,
+           type = "lower",
            method = "circle",
+           show.legend = FALSE,
+           legend.title = "Correlation Coefficent",
            p.mat = attributes_p_values,
-           colors = c("#6D9EC1", "white", "#E46726"))
+           colors = c("#4ea5e3", "#4ea5e3", "#4ea5e3")) + 
+  annotate("text",
+           x = 2.7, y = 6, 
+           color = "#b320ab", size = 3.8,
+           label = "Size of circle indicates 
+strength of positive correlation") +
+    annotate("text",
+           x = 2.7, y = 5, 
+           color = "#1aaf82", size = 3.8,
+           label = "X's indicate significant 
+relationship (alpha = 0.05)") +
+  labs(
+    title = "Correlation Matrix of Company Attributes",
+    subtitle = "Attribute scores from 2022"
+  ) +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
 ```
 
 
