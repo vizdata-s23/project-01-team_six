@@ -4,6 +4,9 @@ subtitle: "STA/ISS 313 - Project 1"
 author: "Team Name"
 format: html
 editor: visual
+execute:
+  echo: false
+  warning: false
 ---
 
 ## Abstract
