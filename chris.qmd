@@ -94,10 +94,10 @@ plot_3 <- ggplot(companies, aes(x = year, y = rq, group = company, color = indus
   labs(title = "Top Companies with Largest Increase and Decrease in RQ Score",
        subtitle = "from 2017-2022", 
        x = "Year", 
-       y = "RQ Score") +
-  transition_reveal(year) +
-  ease_aes('linear') + 
-  theme_bw()
-
+       y = "RQ Score")# +
+  #transition_reveal(year) +
+  #ease_aes('linear') + 
+  #theme_bw()
+# change reset period too 
 plot_3
 ```
