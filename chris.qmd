@@ -19,7 +19,7 @@ editor: visual
 
 -   Next, we intend on created a progressive line chart to visualize their change over time, where each line represents a company. We will utilize the `gganimate` package with the `transition_reveal()` function set to yearly to demonstrate this, and include the `geom_point()` function grouping each company so for each year
 
-```{r}
+```{r setup}
 knitr::opts_chunk$set(warning = FALSE, echo = FALSE, message = FALSE)
 ```
 
@@ -31,59 +31,53 @@ library(tidyverse)
 library(gganimate)
 ```
 
-```{r}
+```{r read data}
 poll <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/poll.csv') 
 ```
 
-```{r}
+```{r filter NAs}
 poll <- poll |>
-  group_by(company) %>%
-  filter(!any(is.na(rq) & year %in% 2017:2021)) %>%
+  group_by(company) |>
+  filter(!any(is.na(rq) & year %in% 2017:2021)) |>
   ungroup()
 ```
 
-```{r}
+```{r remove columns}
 poll <- select(poll, -'2022_rank',  -'change', -'rank')
 ```
 
-```{r}
-poll_2022 <- poll %>%
-  select(company, '2022_rq', 'industry') %>%
-  distinct() %>%
-  rename(rq = `2022_rq`) %>%
+```{r reformat data}
+poll_2022 <- poll |>
+  select(company, '2022_rq', 'industry') |>
+  distinct() |>
+  rename(rq = `2022_rq`) |>
   mutate(year = 2022)
-```
 
-```{r}
 poll <- bind_rows(poll, poll_2022)
-```
-
-```{r}
 poll <- select(poll, -'2022_rq')
 ```
 
-```{r}
-poll_change <- poll %>% 
-  group_by(company) %>% 
+```{r find companies}
+poll_change <- poll |> 
+  group_by(company) |> 
   summarize(rq_change = rq[year == 2022] - rq[year == 2017])
 
 # Get the top 3 companies with the greatest increase and decrease in RQ score
-poll_top3_inc <- poll_change %>% 
-  arrange(desc(rq_change)) %>% 
+poll_top3_inc <- poll_change |> 
+  arrange(desc(rq_change)) |> 
   slice(1:3)
 
-poll_top3_dec <- poll_change %>% 
-  arrange(rq_change) %>% 
+poll_top3_dec <- poll_change |> 
+  arrange(rq_change) |> 
   slice(1:3)
 ```
 
-```{r}
-companies <- poll %>%
+```{r select companies}
+companies <- poll |>
   filter(company %in% c("Johnson & Johnson", "Goldman Sachs", "Facebook", "Samsung", "Wells Fargo & Company", "The Walt Disney Company"))
 ```
 
-```{r}
-
+```{r plot graph}
 company_plot <- ggplot(companies, aes(x = year, y = rq, group = company, color = industry)) +
   geom_line(size = 1) +
   geom_point(size = 3) +
