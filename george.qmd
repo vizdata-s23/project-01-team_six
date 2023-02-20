@@ -12,6 +12,8 @@ library(patchwork)
 library(tidyverse)
 library(ggrepel)
 library(viridis)
+library(ggpubr)
+library(ggpmisc)
 ```
 
 ```{r}
@@ -54,9 +56,30 @@ ggplot(data = reputation_v_g,
        aes(x = VISION, y = GROWTH)) +
   geom_point(aes(color = industry)) +
   geom_smooth(method = lm) + 
-  geom_rug() +
+#  geom_bin2d(binwidth = c(1, 1)) +
+  stat_cor() +  
+#  geom_rug() +
 #  geom_text_repel(aes(label = company)) + 
-  scale_color_viridis(discrete = TRUE) +
+# scale_color_viridis(discrete = TRUE) +
+  theme_minimal() + 
+  labs(
+    x = "Vision Attribute (out of 100)",
+    y = "Growth Attribute (out of 100)",
+    title = "Comparison of Companies' Vision and Growth Ratings",
+    subtitle = "Vision and growth are strongly correlated"
+  )
+```
+
+```{r}
+ggplot(data = reputation_v_g,
+       aes(x = VISION, y = GROWTH)) +
+#  geom_point(aes(color = industry)) +
+  geom_smooth(method = lm) + 
+  geom_bin2d() +
+#  stat_cor() +  
+#  geom_rug() +
+#  geom_text_repel(aes(label = company)) + 
+# scale_color_viridis(discrete = TRUE) +
   theme_minimal() + 
   labs(
     x = "Vision Attribute (out of 100)",
