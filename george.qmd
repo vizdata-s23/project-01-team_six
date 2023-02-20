@@ -10,15 +10,13 @@ library(dplyr)
 library(ggplot2)
 library(patchwork)
 library(tidyverse)
+library(ggrepel)
+library(viridis)
 ```
 
 ```{r}
 poll <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/poll.csv') 
 reputation <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/reputation.csv')
-```
-
-```{r}
-view(poll)
 ```
 
 Steps:
@@ -39,10 +37,34 @@ The two highest attributes are vision and growth, so we will compare those in th
 
 ```{r}
 
+reputation_v_g <- reputation %>%
+  filter(name == "VISION" | name == "GROWTH") %>%
+  select(company, name, score, industry)
+
+reputation_v_g <- reputation_v_g %>%
+  pivot_wider(
+    names_from = name,
+    values_from = score
+  )
 
 ```
 
-
+```{r}
+ggplot(data = reputation_v_g,
+       aes(x = VISION, y = GROWTH)) +
+  geom_point(aes(color = industry)) +
+  geom_smooth(method = lm) + 
+  geom_rug() +
+#  geom_text_repel(aes(label = company)) + 
+  scale_color_viridis(discrete = TRUE) +
+  theme_minimal() + 
+  labs(
+    x = "Vision Attribute (out of 100)",
+    y = "Growth Attribute (out of 100)",
+    title = "Comparison of Companies' Vision and Growth Ratings",
+    subtitle = "Vision and growth are strongly correlated"
+  )
+```
 
 
 
