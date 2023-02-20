@@ -80,3 +80,24 @@ poll_top3_dec <- poll_change %>%
 poll_top3_inc
 poll_top3_dec
 ```
+
+```{r}
+companies <- poll %>%
+  filter(company %in% c("Johnson & Johnson", "Goldman Sachs", "Facebook", "Samsung", "Wells Fargo & Company", "The Walt Disney Company"))
+```
+
+```{r}
+plot_3 <- ggplot(companies, aes(x = year, y = rq, group = company, color = company)) +
+  geom_line(size = 1) +
+  geom_point(size = 3) +
+  theme_bw() +
+  labs(title = "Top Companies with Largest Increase and Decrease in RQ Score",
+       subtitle = "from 2017-2022", 
+       x = "Year", 
+       y = "RQ Score") +
+  transition_reveal(year) +
+  ease_aes('linear') + 
+  theme_bw()
+
+plot_3
+```
