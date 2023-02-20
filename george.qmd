@@ -14,6 +14,7 @@ library(ggrepel)
 library(viridis)
 library(ggpubr)
 library(ggpmisc)
+library(ggcorrplot)
 ```
 
 ```{r}
@@ -89,11 +90,38 @@ ggplot(data = reputation_v_g,
   )
 ```
 
+Correlation matrix:
 
+```{r}
+reputation_longer <- reputation %>%
+  select(company, name, score, industry) %>%
+  pivot_wider(
+    names_from = name,
+    values_from = score
+  )
 
+```
 
+```{r}
+attributes_corr <- reputation_longer %>%
+  as.data.frame() %>%                
+  select(TRUST, ETHICS, GROWTH, `P&S`, CITIZENSHIP, VISION, CULTURE) %>%                   
+  as.matrix() %>%                   
+  cor() 
+attributes_corr
 
+attributes_p_values <- cor_pmat(attributes_corr)
+attributes_p_values
+```
 
+```{r}
+ggcorrplot(attributes_corr, 
+           hc.order = TRUE, 
+           outline.col = "white",
+           method = "circle",
+           p.mat = attributes_p_values,
+           colors = c("#6D9EC1", "white", "#E46726"))
+```
 
 
 
