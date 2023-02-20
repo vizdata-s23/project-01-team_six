@@ -59,7 +59,7 @@ poll <- bind_rows(poll, poll_2022)
 ```
 
 ```{r}
-poll <- select(poll, -'industry',  -'2022_rq')
+poll <- select(poll, -'2022_rq')
 ```
 
 ```{r}
@@ -87,7 +87,7 @@ companies <- poll %>%
 ```
 
 ```{r}
-plot_3 <- ggplot(companies, aes(x = year, y = rq, group = company, color = company)) +
+plot_3 <- ggplot(companies, aes(x = year, y = rq, group = company, color = industry)) +
   geom_line(size = 1) +
   geom_point(size = 3) +
   theme_bw() +
