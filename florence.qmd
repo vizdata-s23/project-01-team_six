@@ -1,0 +1,71 @@
+---
+title: "Personal Project 1"
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+poll <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/poll.csv') 
+reputation <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/reputation.csv')
+```
+
+```{r}
+reputation1 <- reputation %>%
+  group_by(industry, name) %>%
+  mutate(avg_score = mean(score))
+reputation2 <- reputation1 %>%
+  group_by(name) %>%
+  mutate(maxavg = max(avg_score))
+reputation3 <- reputation1 %>%
+  group_by(name) %>%
+  slice(which.max(avg_score))
+
+citizenship <- reputation2 %>%
+  group_by(name) %>%
+  filter(name == "CITIZENSHIP" & avg_score == maxavg)
+culture <- reputation2 %>%
+  group_by(name) %>%
+  filter(name == "CULTURE" & avg_score == maxavg)
+ethics <- reputation2 %>%
+  group_by(name) %>%
+  filter(name == "ETHICS" & avg_score == maxavg)
+growth <- reputation2 %>%
+  group_by(name) %>%
+  filter(name == "GROWTH" & avg_score == maxavg)
+ps <- reputation2 %>%
+  group_by(name) %>%
+  filter(name == "P&S" & avg_score == maxavg)
+trust <- reputation2 %>%
+  group_by(name) %>%
+  filter(name == "TRUST" & avg_score == maxavg)
+vision <- reputation2 %>%
+  group_by(name) %>%
+  filter(name == "VISION" & avg_score == maxavg)
+
+final <- rbind(citizenship, culture, ethics, growth, ps, trust, vision)
+
+get_box_stats <- function(y, upper_limit = max(final$score) * 1.15) {
+  return(data.frame(
+    y = 0.95 * upper_limit,
+    label = paste(
+      "Mean =", round(mean(y), 2), "\n",
+      "Med =", round(median(y), 2), "\n"
+    )
+  ))
+}
+
+```
+
+```{r}
+
+ggplot(final, aes(x = name, y = score, fill = industry)) +
+  geom_boxplot(fatten = 0.8) +
+  labs(title = "Highest Rated Industries In Each Attribute Category", x = "Company Attribute", y = "Score", fill = "Industry") +
+  scale_y_continuous(limits = c(75, 85)) +
+  scale_fill_manual(values = c("#61a0af", "#acc3a6", "#f5d6ba")) +
+  stat_summary(fun.data = get_box_stats, geom = "text", hjust = 0.5, vjust = 0.9, size = 2.6) +
+  theme_minimal() 
+```
