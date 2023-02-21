@@ -7,7 +7,7 @@ title-slide-attributes:
   data-slide-number: none
 format:
   revealjs:
-    theme: minty
+    theme: simple
 editor: visual
 execute:
   echo: false
