@@ -390,3 +390,11 @@ new_poll |>
         ) +
   scale_linetype_manual(values = c("dotted", "solid"))
 ```
+
+## Recap
+
+-   recap 1
+
+-   recap 2
+
+-   recap 3
