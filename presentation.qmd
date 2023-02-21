@@ -54,9 +54,11 @@ reputation <- read.csv("data/reputation.csv")
 
 ## Introduction to Dataset and Motivation
 
--   The presentation is created using the Quarto CLI
+-   Our project aims to investigate the different factors that contribute to customer perceptions of notable company reputations.
 
--   `##` sets the start of a new slide
+-   The dataset that we are using comes from the TidyTuesday project that uses data from the Axis-Harris PolI. It contains information about the company's industry, overall ranking, and RQ score in 2022 as well as information about each company's rating from 2017 to 2021. RQ scores are a metric that is a combination of each company's rating for each specific attribute.
+
+-   By investigating differences in scores between industries, the relationship between attribute categories, and changes in company scores over time, we hope to achieve better insight on the intricacies of what may influence company reputations.
 
 ## Question 1: How do customer ratings of company attributes vary by industry and how do these attributes relate to one another?
 
