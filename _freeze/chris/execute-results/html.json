@@ -1,0 +1,14 @@
+{
+  "hash": "691fbb69216a654c8f1f4d5992a23142",
+  "result": {
+    "markdown": "---\ntitle: \"Investigating Brand Reputation of America's Top 100 Companies\"\nsubtitle: \"Proposal\"\nformat: html\neditor: visual\n---\n\n\n# Dataset\n\n1.  How does company RQ score change between the years of 2017 to 2022 and are the trends consistent with their overall industry?\n\n`poll` dataset. Variables involved include `company`, `rq`, `2022_rq`, and `year`.\n\n-   Remove all companies for which there is an NA value for RQ score for any of these years.\n\n-   Wrangle so `2022_rq` is in the same column as `rq`\n\n-   Filter for the top 3 companies who had the greatest increase in RQ score and top 3 companies with the greatest decrease in RQ score from 2017-2022.\n\n-   Next, we intend on created a progressive line chart to visualize their change over time, where each line represents a company. We will utilize the `gganimate` package with the `transition_reveal()` function set to yearly to demonstrate this, and include the `geom_point()` function grouping each company so for each year\n\n\n::: {.cell}\n\n```{.r .cell-code}\nknitr::opts_chunk$set(warning = FALSE, echo = FALSE, message = FALSE)\n```\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
