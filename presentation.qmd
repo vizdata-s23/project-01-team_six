@@ -52,21 +52,17 @@ poll <- read.csv("data/polls.csv")
 reputation <- read.csv("data/reputation.csv")
 ```
 
-# Investigating America's Most Reputable Companies
-
 ## Introduction to Dataset and Motivation
 
 -   Our project aims to investigate the different factors that contribute to customer perceptions of notable company reputations.
 
--   The dataset that we are using comes from the TidyTuesday project that uses data from the Axis-Harris PolI. It contains information about the company's industry, overall ranking, and RQ score in 2022 as well as information about each company's rating from 2017 to 2021. RQ scores are a metric that is a combination of each company's rating for each specific attribute.
+-   The dataset that we are using comes from the TidyTuesday project that uses data from the Axis-Harris PolI. It contains information about the company's industry, company attribute scores, and overall RQ scores.
 
 -   By investigating differences in scores between industries, the relationship between attribute categories, and changes in company scores over time, we hope to achieve better insight on the intricacies of what may influence company reputations.
 
 ## Question 1: How do customer ratings of company attributes vary by industry and how do these attributes relate to one another?
 
 ## Question 1
-
-### Visualization #1
 
 ```{r}
 #| label: data wrangling q1v1
@@ -126,13 +122,12 @@ ggplot(final, aes(x = name, y = score, fill = industry)) +
   geom_boxplot(fatten = 0.8) +
   labs(title = "Highest Rated Industries In Each Attribute Category", x = "Company Attribute", y = "Score", fill = "Industry") +
   scale_fill_manual(values = c("#4ea5e3", "#ce0e5b", "#1aaf82")) +
-  stat_summary(fun.data = get_box_stats, geom = "text", hjust = 0.5, vjust = 0.9, size = 2.6) +
-  theme_minimal() 
+  stat_summary(fun.data = get_box_stats, geom = "text", hjust = 0.5, vjust = 0.9, size = 2) +
+  theme_minimal() +
+  theme(axis.text.x=element_text(size=7))
 ```
 
 ## Question 1
-
-### Visualization #2
 
 ```{r}
 #| label: data wrangling q1 v2
@@ -165,12 +160,7 @@ attributes_p_values <- cor_pmat(attributes_corr)
 #| label: q1v2 plot
 #| echo: false
 #| warning: false
-#| fig-alt: |
-#|   Body mass vs. flipper lenght of Palmer Penguins for species Adelie and all 
-#|   the others combined together. There is a relatively strong, positive 
-#|   relationship between the two variables. The Adelie penguins are clustered 
-#|   together but they don't exhibit a different trend than the rest of the 
-#|   penguins.
+
 
 ggcorrplot(attributes_corr,
            type = "lower",
@@ -198,8 +188,6 @@ relationship (alpha > 0.05)") +
 ## Question 2: How does company RQ score change between 2017-2022 and are the trends consistent with the overall industry?
 
 ## Question 2
-
-### Visualization #1
 
 ```{r}
 #| label: question 2 visualization 1
@@ -256,8 +244,6 @@ animation
 ```
 
 ## Question 2
-
-### Visualization #2
 
 ```{r}
 #| label: question 2 vizualization 2

@@ -102,8 +102,9 @@ ggplot(final, aes(x = name, y = score, fill = industry)) +
   geom_boxplot(fatten = 0.8) +
   labs(title = "Highest Rated Industries In Each Attribute Category", x = "Company Attribute", y = "Score", fill = "Industry") +
   scale_fill_manual(values = c("#4ea5e3", "#ce0e5b", "#1aaf82")) +
-  stat_summary(fun.data = get_box_stats, geom = "text", hjust = 0.5, vjust = 0.9, size = 2.6) +
-  theme_minimal() 
+  stat_summary(fun.data = get_box_stats, geom = "text", hjust = 0.5, vjust = 0.9, size = 2) +
+  theme_minimal() +
+  theme(axis.text.x=element_text(size=7))
 ```
 
 ##### **Visualization #2:**
@@ -224,7 +225,7 @@ company_plot <- ggplot(companies, aes(x = year, y = rq, group = company, color =
   scale_color_manual(values=c(c("#F9C80E", "#EA3546", "#662E9B", "#43BCCD"))) +
   transition_reveal(year) +
   ease_aes('linear') + 
-  theme_bw()
+  theme_minimal()
 
 animation <- animate(company_plot, fps = 3)
 animation
