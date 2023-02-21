@@ -14,7 +14,14 @@ execute:
 #| include: false
 
 library(tidyverse)
+library(tidymodels)
+library(gt)
+library(patchwork)
+library(gganimate)
 library(ggcorrplot)
+library(dplyr)
+library(ggplot2)
+library(patchwork)
 
 poll <- read.csv("data/polls.csv")
 reputation <- read.csv("data/reputation.csv")

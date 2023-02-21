@@ -23,7 +23,9 @@ library(gt)
 library(patchwork)
 library(gganimate)
 library(ggcorrplot)
-
+library(dplyr)
+library(ggplot2)
+library(patchwork)
 ```
 
 ```{r}
