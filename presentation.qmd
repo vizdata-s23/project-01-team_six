@@ -202,7 +202,6 @@ relationship (alpha > 0.05)") +
 ### Visualization #1
 
 ```{r}
-#| label: q2v1 plot
 #| label: question 2 visualization 1
 # filter NAs
 poll_1 <- poll |>
