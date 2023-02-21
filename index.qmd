@@ -29,7 +29,7 @@ Our project aims to investigate the different factors that contribute to custome
 
 The dataset that we are using comes from the TidyTuesday project that uses data from the Axis-Harris Poll, which investigated the reputation of the most visible brands in America. The Harris Poll conducted a survey in February 2022 among a representative sample of the American population to identify the companies that were most prominent in the public's mind. The top 100 companies with the highest number of nominations were included in the "Most Visible" list. The poll actually resulted in two datsets: \`polls\` and \`reputation\`. The polls dataset has 8 variables and 500 observations. This dataset has each company's industry, overall ranking, and RQ score in 2022 as well as information about each company's rating from 2017 to 2021. RQ scores are a metric that is a combination of each company's rating for each specific attribute. The attributes are: trust, ethics, growth, p&s, citizenship, vision, and culture. It is specifically calculated using the formula:  \[ (Sum of ratings of each of the 9 attributes)/(the total number of attributes answered x 7) \] x 100. Additionally, score ranges are: 80 & above: Excellent \| 75-79: Very Good \| 70-74: Good \| 65-69: Fair \| 55-64: Poor \| 50-54: Very Poor \| Below 50: Critical. Next, the reputation dataset has 10 variables and 700 rows or observations. This dataset is only from the year 2022, and shows the individual breakdown for how companies were scored and ranked based on the 7 attributes mentioned previously. This dataset is important for illustrating the specific attribute categories that different companies and their industries scored well or poorly on.
 
-## Question 1: How do customer ratings of company attributes vary by industry and how do these attributes relate to one another? 
+## Question 1: How do customer ratings of company attributes vary by industry and how do these attributes relate to one another?
 
 ### Introduction
 
@@ -116,6 +116,142 @@ ggplot(final, aes(x = name, y = score, fill = industry)) +
 ### Analysis
 
 (2-3 code blocks, 2 figures, text/code comments as needed): In this section, provide the code that generates your plots. Use scale functions to provide nice axis labels and guides. You are welcome to use theme functions to customize the appearance of your plot, but you are not required to do so. All plots must be made with **ggplot2**. Do not use base R or lattice plotting functions.
+
+```{r}
+#| label: question 2 vizualization 2
+#| message: false
+#| warning: false
+
+# data set with company, rq, and year for years before 2022
+before22_poll <- poll |>
+  select(company, rq, year, industry) |>
+  drop_na(rq)
+
+# data set with company, rq, and year for 2022
+`2022_poll` <- poll |>
+  select(company, `X2022_rq`) |>
+  drop_na(`X2022_rq`) |>
+  pivot_longer(
+    cols = `X2022_rq`,
+    names_to = "year",
+    values_to = "rq"
+  ) |>
+  mutate(year = parse_number(year))
+
+# combine into new dataset
+new_poll <- full_join(before22_poll, `2022_poll`, by = c("company", "rq", "year"))
+
+`17_rq` <- new_poll |>
+  filter(year == 2017) |>
+  select(company, rq) |>
+  rename("start_rq" = "rq")
+
+`22_rq` <- new_poll |>
+  filter(year == 2022) |>
+  select(company, rq) |>
+  rename("end_rq" = "rq")
+
+rq_change <- new_poll |>
+  select(company, industry) |>
+  distinct(company) |>
+  right_join(`17_rq`, by = "company") |>
+  right_join(`22_rq`, by = "company") |>
+  mutate(rq_change = end_rq - start_rq) |>
+  distinct(company, .keep_all = TRUE) |> 
+  select(company, rq_change) |>
+  drop_na(rq_change)
+
+top3_rq <- rq_change |>
+  arrange(rq_change) |>
+  slice_head(n = 3)
+
+last3_rq <- rq_change |>
+  arrange(rq_change) |>
+  slice_tail(n = 3)
+
+companies <- c("Samsung", "Goldman Sachs", "Wells Fargo & Company",
+               "Facebook", "Johnson & Johnson", "The Walt Disney Company")
+industries <- c("Tech", "Media", "Pharma", "Financial Services")
+
+line_data <- new_poll |> filter(company %in% companies) |>
+    mutate(industry = case_when(company == "Samsung" ~ "Tech",
+                                company == "The Walt Disney Company" ~ "Media",
+                                company == "Johnson & Johnson" ~  "Pharma",
+                                company == "Goldman Sachs" ~ "Financial Services",
+                                company == "Wells Fargo & Company" ~ "Financial Services",
+                                company == "Facebook" ~  "Tech")) |>
+    group_by(industry, year) |>
+    summarize(mean_rq = mean(rq), .groups = "drop")
+
+
+  
+new_poll <- new_poll |>
+  mutate(industry = case_when(
+    company == "Apple" ~ "Tech",
+    company == "American Express" ~ "Financial Services",
+    company == "Bank of America" ~ "Financial Services",
+    company == "Citigroup" ~ "Financial Services",
+    company == "Comcast" ~ "Media",
+    company == "Dell" ~ "Tech",
+    company == "Electronic Arts, Inc." ~ "Tech",
+    company == "Facebook" ~ "Tech",
+    company == "Fox Corporation" ~ "Media",
+    company == "Goldman Sachs" ~ "Financial Services",
+    company == "Google" ~ "Tech",
+    company == "IBM" ~ "Tech",
+    company == "Johnson & Johnson" ~ "Pharma",
+    company == "JPMorgan Chase & Co." ~ "Financial Services",
+    company == "LG Corporation" ~ "Tech",
+    company == "Microsoft" ~ "Tech",
+    company == "Netflix" ~ "Tech",
+    company == "Pfizer" ~ "Pharma",
+    company == "Robinhood" ~ "Tech",
+    company == "Samsung" ~ "Tech",
+    company == "Sony" ~ "Tech",
+    company == "Spotify" ~ "Media",
+    company == "State Farm Insurance" ~ "Financial Services",
+    company == "The Walt Disney Company" ~ "Media",
+    company == "TikTok" ~ "Tech",
+    company == "Twitter" ~ "Tech",
+    company == "Uber" ~ "Tech",
+    company == "USAA" ~ "Financial Services",
+    company == "Wells Fargo & Company" ~ "Financial Services",
+    TRUE ~ industry
+  ))
+
+new_poll |> 
+  filter(industry %in% industries) |>
+  ggplot(aes(x = year, y = rq, group = industry, color = industry)) +
+  geom_smooth(method = 'loess',
+              alpha = 0.25,
+              show.legend = TRUE,
+              linewidth = 0.5,
+              aes(fill = industry, color = industry, linetype = "company fit")) +
+    geom_line(data = line_data, aes(x = year, y = mean_rq, group = industry, color = industry, linetype = "industry mean"), linewidth = 1) +
+  facet_wrap(~ industry, ncol = 4) +
+   geom_point(data = line_data, aes(x = year, y = mean_rq), size = 3) +
+    theme_minimal() +
+  labs(title = "Mean Company RQ Changes Over Time for Different Industries",
+       y = "RQ",
+       x = "Year",
+       color = "Industry",
+       fill = "Industry",
+       subtitle = "with company trendlines and variability in RQ scores",
+       linetype = "Line") +
+  scale_color_viridis_d() + 
+  scale_color_manual(values = c("#F9C80E", "#EA3546", "#662E9B", "#43BCCD")) +
+  scale_fill_manual(values = c("#F9C80E", "#EA3546", "#662E9B", "#43BCCD") )+
+  theme(legend.position = "bottom",
+        axis.text = element_text(size = 7),
+        panel.spacing=unit(1,"lines"),
+        legend.direction = "horizontal",
+        legend.box = "vertical",
+        legend.box.background = element_rect(color = "grey"),
+        legend.key=element_rect(colour="grey")
+        ) +
+  scale_linetype_manual(values = c("dotted", "solid"))
+
+```
 
 ### Discussion
 
