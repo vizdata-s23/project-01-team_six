@@ -22,7 +22,6 @@ poll <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidyt
 reputation <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-31/reputation.csv')
 ```
 
-
 Correlation matrix:
 
 ```{r}
@@ -80,14 +79,3 @@ relationship (alpha = 0.05)") +
   theme(plot.title = element_text(hjust = 0.5),
         plot.subtitle = element_text(hjust = 0.5))
 ```
-
-
-
-
-
-
-
-
-
-
-
