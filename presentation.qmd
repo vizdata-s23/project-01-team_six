@@ -191,11 +191,13 @@ relationship (alpha > 0.05)") +
         plot.subtitle = element_text(hjust = 0.5))
 ```
 
-## Question 2: How does company RQ score change between the years of 2017 to 2022 and are the trends consistent with their overall industry?
+## Question 2: How does company RQ score change between 2017-2022 and are the trends consistent with the overall industry?
 
 ### Visualization #1
 
 ```{r}
+#| label: q2v1 plot
+
 # filter NAs
 poll <- poll |>
   group_by(company) |>
@@ -255,6 +257,7 @@ company_plot <- ggplot(companies, aes(x = year, y = rq, group = company, color =
   theme_bw()
 
 animation <- animate(company_plot, fps = 1)
+animation
 ```
 
 ## Question 2 Continued

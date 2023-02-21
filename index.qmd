@@ -186,21 +186,15 @@ poll <- poll |>
   filter(!any(is.na(rq) & year %in% 2017:2021)) |>
   ungroup()
 
-# remove unnecessary column
-poll <- select(poll, -'2022_rank',  -'change', -'rank')
-
 # create year 2022 column with 2022 RQ score 
 poll_2022 <- poll |>
-  select(company, '2022_rq', 'industry') |>
+  select(company, `X2022_rq`, `industry`) |>
   distinct() |>
   rename(rq = `2022_rq`) |>
   mutate(year = 2022)
 
 # merge two datasets together
 poll <- bind_rows(poll, poll_2022)
-
-# remove unnecessary column
-poll <- select(poll, -'2022_rq')
 
 # calculate RQ score change from 2017-2022 
 poll_change <- poll |> 
@@ -235,7 +229,8 @@ company_plot <- ggplot(companies, aes(x = year, y = rq, group = company, color =
   ease_aes('linear') + 
   theme_bw()
 
-animation <- animate(company_plot, fps = 1)
+animation <- animate(company_plot, fps = 3)
+animation
 ```
 
 ##### Visualization #2
