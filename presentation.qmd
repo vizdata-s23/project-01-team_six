@@ -5,7 +5,9 @@ author: "Team Six: George McCabe, Shelby Tisdale, Florence Wang, Chris Yang"
 title-slide-attributes:
   data-background-size: stretch
   data-slide-number: none
-format: revealjs
+format:
+  revealjs:
+    theme: minty
 editor: visual
 execute:
   echo: false
