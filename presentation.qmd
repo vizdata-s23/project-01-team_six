@@ -64,6 +64,8 @@ reputation <- read.csv("data/reputation.csv")
 
 ## Question 1: How do customer ratings of company attributes vary by industry and how do these attributes relate to one another?
 
+## Question 1
+
 ### Visualization #1
 
 ```{r}
@@ -128,7 +130,7 @@ ggplot(final, aes(x = name, y = score, fill = industry)) +
   theme_minimal() 
 ```
 
-## Question 1 Continued
+## Question 1
 
 ### Visualization #2
 
@@ -194,6 +196,8 @@ relationship (alpha > 0.05)") +
 ```
 
 ## Question 2: How does company RQ score change between 2017-2022 and are the trends consistent with the overall industry?
+
+## Question 2
 
 ### Visualization #1
 
@@ -262,7 +266,7 @@ animation <- animate(company_plot, fps = 1)
 animation
 ```
 
-## Question 2 Continued
+## Question 2
 
 ### Visualization #2
 
