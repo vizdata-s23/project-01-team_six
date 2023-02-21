@@ -352,10 +352,9 @@ new_poll |>
   ggplot(aes(x = year, y = rq, group = industry, color = industry)) +
   geom_smooth(method = 'loess',
               alpha = 0.25,
-              show.legend = TRUE,
               linewidth = 0.5,
               aes(fill = industry, color = industry, linetype = "company fit")) +
-  geom_line(data = line_data,
+  geom_line(data = line_data, show.legend = FALSE,
             aes(x = year, y = mean_rq, group = industry, color = industry,
                 linetype = "industry mean"),
             linewidth = 1) +
@@ -376,10 +375,8 @@ new_poll |>
   theme(legend.position = "bottom",
         axis.text = element_text(size = 7),
         panel.spacing=unit(1,"lines"),
-        legend.direction = "horizontal",
-        legend.box = "vertical",
-        legend.box.background = element_rect(color = "grey"),
-        legend.key=element_rect(colour="grey")
+        legend.direction = "vertical",
+        legend.box = "horizontal"
         ) +
   scale_linetype_manual(values = c("dotted", "solid"))
 
