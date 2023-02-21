@@ -3,7 +3,6 @@ title: "Investigating America's Most Reputable Companies"
 subtitle: "STA/ISS 313 - Spring 2023 - Project 1"
 author: "Team Six: George McCabe, Shelby Tisdale, Florence Wang, Chris Yang"
 title-slide-attributes:
-  data-background-image: images/watercolour_sys02_img34_teacup-ocean.jpg
   data-background-size: stretch
   data-slide-number: none
 format: revealjs
@@ -106,7 +105,15 @@ final <- rbind(citizenship, culture, ethics, growth, ps, trust, vision)
 ```{r}
 #| label: q1v1 plot
 #| echo: false
-
+get_box_stats <- function(y, upper_limit = max(final$score) * 1.15) {
+  return(data.frame(
+    y = 0.95 * upper_limit,
+    label = paste(
+      "Mean =", round(mean(y), 2), "\n",
+      "Med =", round(median(y), 2), "\n"
+    )
+  ))
+}
 ggplot(final, aes(x = name, y = score, fill = industry)) +
   geom_boxplot(fatten = 0.8) +
   labs(title = "Highest Rated Industries In Each Attribute Category", x = "Company Attribute", y = "Score", fill = "Industry") +
@@ -147,7 +154,7 @@ attributes_p_values <- cor_pmat(attributes_corr)
 ```
 
 ```{r}
-#| label: 
+#| label: q1v2 plot
 #| echo: false
 #| warning: false
 #| fig-alt: |
@@ -186,28 +193,7 @@ relationship (alpha > 0.05)") +
 
 ### Visualization #1
 
-::: columns
-::: {.column width="50%"}
--   Some text
--   goes here
-:::
-
-::: {.column width="50%"}
-```{r}
-#| warning: false
-#| out-width: "100%"
-#| fig-width: 4
-#| echo: false
-
-# See how I changed out-width and fig-width from defaults
-# to make the figure bigger
-
-ggplot(penguins, aes(x = bill_length_mm, y = species, color = species)) +
-  geom_boxplot() +
-  theme_minimal()
-```
-:::
-:::
+### 
 
 ## Question 2 Continued
 
