@@ -58,10 +58,10 @@ attributes_p_values
 ggcorrplot(attributes_corr,
            type = "lower",
            method = "circle",
-           show.legend = FALSE,
+           show.legend = TRUE,
            legend.title = "Correlation Coefficent",
            p.mat = attributes_p_values,
-           colors = c("#4ea5e3", "#4ea5e3", "#4ea5e3")) + 
+           colors = c("#ce0e5b", "white", "#4ea5e3")) + 
   annotate("text",
            x = 2.7, y = 6, 
            color = "#b320ab", size = 3.8,
@@ -70,8 +70,8 @@ strength of positive correlation") +
     annotate("text",
            x = 2.7, y = 5, 
            color = "#1aaf82", size = 3.8,
-           label = "X's indicate significant 
-relationship (alpha = 0.05)") +
+           label = "X's indicate no significant 
+relationship (alpha > 0.05)") +
   labs(
     title = "Correlation Matrix of Company Attributes",
     subtitle = "Attribute scores from 2022"
