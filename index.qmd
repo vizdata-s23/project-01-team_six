@@ -141,16 +141,19 @@ before22_poll <- poll |>
 # combine into new dataset
 new_poll <- full_join(before22_poll, `2022_poll`, by = c("company", "rq", "year"))
 
+# rq in 2017
 `17_rq` <- new_poll |>
   filter(year == 2017) |>
   select(company, rq) |>
   rename("start_rq" = "rq")
 
+# rq in 2022
 `22_rq` <- new_poll |>
   filter(year == 2022) |>
   select(company, rq) |>
   rename("end_rq" = "rq")
 
+# change in rq
 rq_change <- new_poll |>
   select(company, industry) |>
   distinct(company) |>
@@ -161,18 +164,24 @@ rq_change <- new_poll |>
   select(company, rq_change) |>
   drop_na(rq_change)
 
+# find 3 companies greatest rq increase
 top3_rq <- rq_change |>
   arrange(rq_change) |>
   slice_head(n = 3)
 
+# find 3 companies greatest rq decrease
 last3_rq <- rq_change |>
   arrange(rq_change) |>
   slice_tail(n = 3)
 
+# companies
 companies <- c("Samsung", "Goldman Sachs", "Wells Fargo & Company",
                "Facebook", "Johnson & Johnson", "The Walt Disney Company")
+
+# industries that these companies are in 
 industries <- c("Tech", "Media", "Pharma", "Financial Services")
 
+# data set for geom line
 line_data <- new_poll |> filter(company %in% companies) |>
     mutate(industry = case_when(company == "Samsung" ~ "Tech",
                                 company == "The Walt Disney Company" ~ "Media",
@@ -183,8 +192,7 @@ line_data <- new_poll |> filter(company %in% companies) |>
     group_by(industry, year) |>
     summarize(mean_rq = mean(rq), .groups = "drop")
 
-
-  
+# fill in mising industry values for 2022 data
 new_poll <- new_poll |>
   mutate(industry = case_when(
     company == "Apple" ~ "Tech",
@@ -219,6 +227,8 @@ new_poll <- new_poll |>
     TRUE ~ industry
   ))
 
+
+# create visualization
 new_poll |> 
   filter(industry %in% industries) |>
   ggplot(aes(x = year, y = rq, group = industry, color = industry)) +
@@ -227,10 +237,14 @@ new_poll |>
               show.legend = TRUE,
               linewidth = 0.5,
               aes(fill = industry, color = industry, linetype = "company fit")) +
-    geom_line(data = line_data, aes(x = year, y = mean_rq, group = industry, color = industry, linetype = "industry mean"), linewidth = 1) +
+  geom_line(data = line_data,
+            aes(x = year, y = mean_rq, group = industry, color = industry,
+                linetype = "industry mean"),
+            linewidth = 1) +
   facet_wrap(~ industry, ncol = 4) +
-   geom_point(data = line_data, aes(x = year, y = mean_rq), size = 3) +
-    theme_minimal() +
+  geom_point(data = line_data,
+             aes(x = year, y = mean_rq), size = 3) +
+  theme_minimal() +
   labs(title = "Mean Company RQ Changes Over Time for Different Industries",
        y = "RQ",
        x = "Year",
