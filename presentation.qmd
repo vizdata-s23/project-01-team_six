@@ -267,5 +267,147 @@ animation
 ### Visualization #2
 
 ```{r}
+#| label: question 2 vizualization 2
+#| message: false
+#| warning: false
 
+# data set with company, rq, and year for years before 2022
+before22_poll <- poll |>
+  select(company, rq, year, industry) |>
+  drop_na(rq)
+
+# data set with company, rq, and year for 2022
+`2022_poll` <- poll |>
+  select(company, `X2022_rq`) |>
+  drop_na(`X2022_rq`) |>
+  pivot_longer(
+    cols = `X2022_rq`,
+    names_to = "year",
+    values_to = "rq"
+  ) |>
+  mutate(year = parse_number(year))
+
+# combine into new dataset
+new_poll <- full_join(before22_poll, `2022_poll`, by = c("company", "rq", "year"))
+
+# rq in 2017
+`17_rq` <- new_poll |>
+  filter(year == 2017) |>
+  select(company, rq) |>
+  rename("start_rq" = "rq")
+
+# rq in 2022
+`22_rq` <- new_poll |>
+  filter(year == 2022) |>
+  select(company, rq) |>
+  rename("end_rq" = "rq")
+
+# change in rq
+rq_change <- new_poll |>
+  select(company, industry) |>
+  distinct(company) |>
+  right_join(`17_rq`, by = "company") |>
+  right_join(`22_rq`, by = "company") |>
+  mutate(rq_change = end_rq - start_rq) |>
+  distinct(company, .keep_all = TRUE) |> 
+  select(company, rq_change) |>
+  drop_na(rq_change)
+
+# find 3 companies greatest rq increase
+top3_rq <- rq_change |>
+  arrange(rq_change) |>
+  slice_head(n = 3)
+
+# find 3 companies greatest rq decrease
+last3_rq <- rq_change |>
+  arrange(rq_change) |>
+  slice_tail(n = 3)
+
+# companies
+companies <- c("Samsung", "Goldman Sachs", "Wells Fargo & Company",
+               "Facebook", "Johnson & Johnson", "The Walt Disney Company")
+
+# industries that these companies are in 
+industries <- c("Tech", "Media", "Pharma", "Financial Services")
+
+# data set for geom line
+line_data <- new_poll |> filter(company %in% companies) |>
+    mutate(industry = case_when(company == "Samsung" ~ "Tech",
+                                company == "The Walt Disney Company" ~ "Media",
+                                company == "Johnson & Johnson" ~  "Pharma",
+                                company == "Goldman Sachs" ~ "Financial Services",
+                                company == "Wells Fargo & Company" ~ "Financial Services",
+                                company == "Facebook" ~  "Tech")) |>
+    group_by(industry, year) |>
+    summarize(mean_rq = mean(rq), .groups = "drop")
+
+# fill in mising industry values for 2022 data
+new_poll <- new_poll |>
+  mutate(industry = case_when(
+    company == "Apple" ~ "Tech",
+    company == "American Express" ~ "Financial Services",
+    company == "Bank of America" ~ "Financial Services",
+    company == "Citigroup" ~ "Financial Services",
+    company == "Comcast" ~ "Media",
+    company == "Dell" ~ "Tech",
+    company == "Electronic Arts, Inc." ~ "Tech",
+    company == "Facebook" ~ "Tech",
+    company == "Fox Corporation" ~ "Media",
+    company == "Goldman Sachs" ~ "Financial Services",
+    company == "Google" ~ "Tech",
+    company == "IBM" ~ "Tech",
+    company == "Johnson & Johnson" ~ "Pharma",
+    company == "JPMorgan Chase & Co." ~ "Financial Services",
+    company == "LG Corporation" ~ "Tech",
+    company == "Microsoft" ~ "Tech",
+    company == "Netflix" ~ "Tech",
+    company == "Pfizer" ~ "Pharma",
+    company == "Robinhood" ~ "Tech",
+    company == "Samsung" ~ "Tech",
+    company == "Sony" ~ "Tech",
+    company == "Spotify" ~ "Media",
+    company == "State Farm Insurance" ~ "Financial Services",
+    company == "The Walt Disney Company" ~ "Media",
+    company == "TikTok" ~ "Tech",
+    company == "Twitter" ~ "Tech",
+    company == "Uber" ~ "Tech",
+    company == "USAA" ~ "Financial Services",
+    company == "Wells Fargo & Company" ~ "Financial Services",
+    TRUE ~ industry
+  ))
+
+
+# create visualization
+new_poll |> 
+  filter(industry %in% industries) |>
+  ggplot(aes(x = year, y = rq, group = industry, color = industry)) +
+  geom_smooth(method = 'loess',
+              alpha = 0.25,
+              linewidth = 0.5,
+              aes(fill = industry, color = industry, linetype = "company fit")) +
+  geom_line(data = line_data, show.legend = FALSE,
+            aes(x = year, y = mean_rq, group = industry, color = industry,
+                linetype = "industry mean"),
+            linewidth = 1) +
+  facet_wrap(~ industry, ncol = 4) +
+  geom_point(data = line_data,
+             aes(x = year, y = mean_rq), size = 3) +
+  theme_minimal() +
+  labs(title = "Mean Company RQ Changes Over Time for Different Industries",
+       y = "RQ",
+       x = "Year",
+       color = "Industry",
+       fill = "Industry",
+       subtitle = "with company trendlines and variability in RQ scores",
+       linetype = "Line") +
+  scale_color_viridis_d() + 
+  scale_color_manual(values = c("#F9C80E", "#EA3546", "#662E9B", "#43BCCD")) +
+  scale_fill_manual(values = c("#F9C80E", "#EA3546", "#662E9B", "#43BCCD") )+
+  theme(legend.position = "bottom",
+        axis.text = element_text(size = 7),
+        panel.spacing=unit(1,"lines"),
+        legend.direction = "vertical",
+        legend.box = "horizontal"
+        ) +
+  scale_linetype_manual(values = c("dotted", "solid"))
 ```
