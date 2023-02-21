@@ -38,13 +38,12 @@ The dataset that we are using comes from the TidyTuesday project that uses data 
 
 ### Approach
 
-(1-2 paragraphs): Describe what types of plots you are going to make to address your question. For each plot, provide a clear explanation as to why this plot (e.g. boxplot, barplot, histogram, etc.) is best for providing the information you are asking about. The two plots should be of different types, and at least one of the two plots needs to use either color mapping or facets.
-
 ### Analysis
 
 ##### Visualization #1
 
-```{r question 1 visualization 1}
+```{r}
+#| label: question 1 visualization 1
 reputation1 <- reputation |>
   group_by(industry, name) |>
   mutate(avg_score = mean(score))
@@ -170,7 +169,9 @@ relationship (alpha > 0.05)") +
 
 ### Analysis
 
-(2-3 code blocks, 2 figures, text/code comments as needed): In this section, provide the code that generates your plots. Use scale functions to provide nice axis labels and guides. You are welcome to use theme functions to customize the appearance of your plot, but you are not required to do so. All plots must be made with **ggplot2**. Do not use base R or lattice plotting functions.
+##### Visualization #1
+
+##### Visualization #2
 
 ```{r}
 #| label: question 2 vizualization 2
