@@ -20,8 +20,11 @@ execute:
 # Remove any packages from this list that you're not using
 library(tidyverse)
 library(tidymodels)
-library(palmerpenguins)
 library(gt)
+library(patchwork)
+library(gganimate)
+library(ggcorrplot)
+
 ```
 
 ```{r}
@@ -42,66 +45,109 @@ knitr::opts_chunk$set(
 #| label: load-data
 #| include: false
 
-# Load your data here
+poll <- read.csv("data/polls.csv")
+reputation <- read.csv("data/reputation.csv")
 ```
 
-# Using Quarto for presentations
+# Investigating America's Most Reputable Companies
 
-## Quarto
+## Introduction to Dataset and Motivation
 
 -   The presentation is created using the Quarto CLI
 
 -   `##` sets the start of a new slide
 
-## Layouts
+## Question 1: How do customer ratings of company attributes vary by industry and how do these attributes relate to one another?
 
-You can use plain text
-
--   or bullet points
-
-::: columns
-::: {.column width="50%"}
-or text in two columns $^*$
-:::
-
-::: {.column width="50%"}
--   like
--   this
-:::
-:::
-
-### 
-
-::: aside
-\[\*\] And add footnotes
-:::
-
-## Code
+### Visualization #1
 
 ```{r}
-#| label: boring-regression
+#| label: data wrangling q1v1
+#| echo: false
+#data wrangling
+reputation1 <- reputation |>
+  group_by(industry, name) |>
+  mutate(avg_score = mean(score))
+reputation2 <- reputation1 |>
+  group_by(name) |>
+  mutate(maxavg = max(avg_score))
 
-# a boring regression
-model <- lm(dist ~ speed, data = cars)
-tidy(model)
-glance(model)
+#used to confirm which industries were the highest scored in each category
+overview <- reputation1 |>
+  group_by(name) |>
+  slice(which.max(avg_score))
+
+#creating dataframes for each attribute based on which industry had the highest average
+citizenship <- reputation2 |>
+  group_by(name) |>
+  filter(name == "CITIZENSHIP" & avg_score == maxavg)
+culture <- reputation2 |>
+  group_by(name) |>
+  filter(name == "CULTURE" & avg_score == maxavg)
+ethics <- reputation2 |>
+  group_by(name) |>
+  filter(name == "ETHICS" & avg_score == maxavg)
+growth <- reputation2 |>
+  group_by(name) |>
+  filter(name == "GROWTH" & avg_score == maxavg)
+ps <- reputation2 |>
+  group_by(name) |>
+  filter(name == "P&S" & avg_score == maxavg)
+trust <- reputation2 |>
+  group_by(name) |>
+  filter(name == "TRUST" & avg_score == maxavg)
+vision <- reputation2 |>
+  group_by(name) |>
+  filter(name == "VISION" & avg_score == maxavg)
+
+final <- rbind(citizenship, culture, ethics, growth, ps, trust, vision)
 ```
 
-## Plots
-
 ```{r}
-#| label: recode-species
+#| label: q1v1 plot
 #| echo: false
 
-# In this chunk I'm doing a bunch of analysis that I don't want to present 
-# in my slides. But I need the resulting data frame for a plot I want to present.
+ggplot(final, aes(x = name, y = score, fill = industry)) +
+  geom_boxplot(fatten = 0.8) +
+  labs(title = "Highest Rated Industries In Each Attribute Category", x = "Company Attribute", y = "Score", fill = "Industry") +
+  scale_fill_manual(values = c("#4ea5e3", "#ce0e5b", "#1aaf82")) +
+  stat_summary(fun.data = get_box_stats, geom = "text", hjust = 0.5, vjust = 0.9, size = 2.6) +
+  theme_minimal() 
+```
 
-penguins_modified <- penguins %>%
-  mutate(species = fct_other(species, keep = "Adelie"))
+## Question 1 Continued
+
+### Visualization #2
+
+```{r}
+#| label: data wrangling q1 v2
+#| echo: false
+
+reputation_longer <- reputation |>
+  select(company, name, score, industry) |>
+  pivot_wider(
+    names_from = name,
+    values_from = score
+  )
+
+reputation_longer <- reputation_longer |>
+  rename("Trust" = "TRUST",
+         "Ethics" = "ETHICS",
+         "Growth" = "GROWTH",
+         "Citizenship" = "CITIZENSHIP",
+         "Vision" = "VISION",
+         "Culture" = "CULTURE")
+
+attributes_corr <- reputation_longer |>
+  as.data.frame() |>               
+  select(Trust, Ethics, Growth, `P&S`, Citizenship, Vision, Culture) |>                   
+  as.matrix() |>                   
+  cor() 
+attributes_p_values <- cor_pmat(attributes_corr)
 ```
 
 ```{r}
-#| label: plot-penguins
+#| label: 
 #| echo: false
 #| warning: false
 #| fig-alt: |
@@ -111,18 +157,34 @@ penguins_modified <- penguins %>%
 #|   together but they don't exhibit a different trend than the rest of the 
 #|   penguins.
 
-# Uses modified penguins dataset from previous chunk
-# Play around with height and width until you're happy with the look
-
-ggplot(
-  penguins_modified, 
-  aes(x = flipper_length_mm, y = body_mass_g, color = species)
+ggcorrplot(attributes_corr,
+           type = "lower",
+           method = "circle",
+           show.legend = TRUE,
+           legend.title = "Correlation Coefficent",
+           p.mat = attributes_p_values,
+           colors = c("#ce0e5b", "white", "#4ea5e3")) + 
+  annotate("text",
+           x = 2.7, y = 6, 
+           color = "#b320ab", size = 3.8,
+           label = "Size of circle indicates 
+strength of positive correlation") +
+    annotate("text",
+           x = 2.7, y = 5, 
+           color = "#1aaf82", size = 3.8,
+           label = "X's indicate no significant 
+relationship (alpha > 0.05)") +
+  labs(
+    title = "Correlation Matrix of Company Attributes",
+    subtitle = "Attribute scores from 2022"
   ) +
-  geom_point() + 
-  theme_minimal()
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
 ```
 
-## Plot and text
+## Question 2: How does company RQ score change between the years of 2017 to 2022 and are the trends consistent with their overall industry?
+
+### Visualization #1
 
 ::: columns
 ::: {.column width="50%"}
@@ -147,40 +209,10 @@ ggplot(penguins, aes(x = bill_length_mm, y = species, color = species)) +
 :::
 :::
 
-# A new section...
+## Question 2 Continued
 
-## Tables
-
-If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
+### Visualization #2
 
 ```{r}
-#| label: penguins-table
 
-gt(head(penguins))
 ```
-
-## Images
-
-![Image credit: Danielle Navarro, Percolate.](images/watercolour_sys02_img34_teacup-ocean.png)
-
-## Math Expressions {.smaller}
-
-You can write LaTeX math expressions inside a pair of dollar signs, e.g. \$\alpha+\beta\$ renders $\alpha+\beta$. You can use the display style with double dollar signs:
-
-    $$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-
-Limitations:
-
-1.  The source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting `$$` must appear in the very beginning of a line, followed immediately by a non-space character, and the ending `$$` must be at the end of a line, led by a non-space character;
-
-2.  There should not be spaces after the opening `$` or before the closing `$`.
-
-# Wrap up
-
-## Feeling adventurous?
-
--   You are welcomed to use the default styling of the slides. In fact, that's what I expect majority of you will do. You will differentiate yourself with the content of your presentation.
-
--   But some of you might want to play around with slide styling. Some solutions for this can be found at https://quarto.org/docs/presentations/revealjs.

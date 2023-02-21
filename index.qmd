@@ -1,5 +1,5 @@
 ---
-title: "Investigating Brand Reputation of America's Top 100 Companies"
+title: "Investigating America's Most Reputable Companies"
 subtitle: "STA/ISS 313 - Project 1"
 author: "Team Six"
 format: html
