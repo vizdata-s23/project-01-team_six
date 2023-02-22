@@ -189,6 +189,8 @@ relationship (alpha > 0.05)") +
 
 ```{r}
 #| label: question 2 visualization 1
+#| #| message: false
+#| warning: false
 # filter NAs
 poll_1 <- poll |>
   group_by(company) |>
