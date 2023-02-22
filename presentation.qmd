@@ -393,8 +393,8 @@ new_poll |>
 
 ## Recap
 
--   recap 1
+-   Company industry affects how consumers feel about companies.
 
--   recap 2
+-   Consumers similarly rate a company across all attributes.
 
--   recap 3
+-   Real-world events affected how consumers evaluated companies over time.
