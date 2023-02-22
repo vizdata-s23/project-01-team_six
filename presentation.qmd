@@ -56,7 +56,6 @@ reputation <- read.csv("data/reputation.csv")
 
 -   Our project aims to investigate the different factors that contribute to customer perceptions of notable company reputations.
 -   The dataset that we are using comes from the TidyTuesday project that uses data from the Axis-Harris PolI. It contains information about the company's industry, company attribute scores, and overall RQ scores.
--   By investigating differences in scores between industries, the relationship between attribute categories, and changes in company scores over time, we hope to achieve better insight on company reputations
 
 ## Question 1
 
