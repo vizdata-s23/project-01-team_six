@@ -55,10 +55,8 @@ reputation <- read.csv("data/reputation.csv")
 ## Introduction to Dataset and Motivation
 
 -   Our project aims to investigate the different factors that contribute to customer perceptions of notable company reputations.
-
 -   The dataset that we are using comes from the TidyTuesday project that uses data from the Axis-Harris PolI. It contains information about the company's industry, company attribute scores, and overall RQ scores.
-
--   By investigating differences in scores between industries, the relationship between attribute categories, and changes in company scores over time, we hope to achieve better insight on the intricacies of what may influence company reputations.
+-   By investigating differences in scores between industries, the relationship between attribute categories, and changes in company scores over time, we hope to achieve better insight on company reputations
 
 ## Question 1: How do customer ratings of company attributes vary by industry and how do these attributes relate to one another?
 
@@ -394,7 +392,12 @@ new_poll |>
 ## Recap
 
 -   Company industry affects how consumers feel about companies.
-
 -   Consumers similarly rate a company across all attributes.
-
 -   Real-world events affected how consumers evaluated companies over time.
+
+**Limitations**
+
+-   Only have attribute data for 2022, so can't tell how companies' attribute ratings changed over time
+-   Visualizations don't necessarily depict the underlying reasons due to change in RQ score
+-   
+-   

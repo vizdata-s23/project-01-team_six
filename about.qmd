@@ -6,7 +6,7 @@ editor: visual
 
 This project was developed by **\[team name\]** For [STA/ISS 313: Advanced Data Visualization](https://vizdata.org/) at Duke University. The team is comprised of the following team members.
 
--   Team member 1: One sentence description of Team member 1 (e.g., year, major, etc.).
--   Team member 2: One sentence description of Team member 2 (e.g., year, major, etc.).
--   Team member 3: One sentence description of Team member 3 (e.g., year, major, etc.).
--   Team member 4: One sentence description of Team member 4 (e.g., year, major, etc.).
+-   Team member 1: Florence is a senior studying statistics and neuroscience.
+-   Team member 2: George McCabe is a junior studying public policy and statistics.
+-   Team member 3: Chris Yang is a senior studying computer science and statistics.
+-   Team member 4: Shelby Tisdale is a sophomore studying statistics and education.
