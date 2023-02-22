@@ -58,7 +58,9 @@ reputation <- read.csv("data/reputation.csv")
 -   The dataset that we are using comes from the TidyTuesday project that uses data from the Axis-Harris PolI. It contains information about the company's industry, company attribute scores, and overall RQ scores.
 -   By investigating differences in scores between industries, the relationship between attribute categories, and changes in company scores over time, we hope to achieve better insight on company reputations
 
-## Question 1: How do customer ratings of company attributes vary by industry and how do these attributes relate to one another?
+## Question 1
+
+### How do customer ratings of company attributes vary by industry and how do these attributes relate to one another?
 
 ## Question 1
 
@@ -183,7 +185,9 @@ relationship (alpha > 0.05)") +
   ) 
 ```
 
-## Question 2: How does company RQ score change between 2017-2022 and are the trends consistent with the overall industry?
+## Question 2
+
+### How does company RQ score change between 2017-2022 and are the trends consistent with the overall industry?
 
 ## Question 2
 
@@ -380,13 +384,14 @@ new_poll |>
        subtitle = "with company trendlines and variability in RQ scores",
        linetype = "Line") +
   scale_color_viridis_d() + 
+  scale_x_continuous(breaks = seq(from = 2017, to = 2022, by = 2)) + 
   scale_color_manual(values = c("#F9C80E", "#EA3546", "#662E9B", "#43BCCD")) +
   scale_fill_manual(values = c("#F9C80E", "#EA3546", "#662E9B", "#43BCCD") )+
   theme(legend.position = "bottom",
         axis.text = element_text(size = 7),
         panel.spacing=unit(1,"lines"),
-        legend.direction = "vertical",
-        legend.box = "horizontal"
+        legend.direction = "horizontal",
+        legend.box = "vertical"
         ) +
   scale_linetype_manual(values = c("dotted", "solid"))
 ```
@@ -401,5 +406,3 @@ new_poll |>
 
 -   Only have attribute data for 2022, so can't tell how companies' attribute ratings changed over time
 -   Visualizations don't necessarily depict the underlying reasons due to change in RQ score
--   
--   
